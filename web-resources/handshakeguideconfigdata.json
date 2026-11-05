@@ -1,0 +1,311 @@
+{
+  "title": "REST Connectivity Handshake Guide",
+  "subtitle": "Investment Account Web Services - PIT Current Version",
+  "sections": [
+    {
+      "id": "audience",
+      "title": "Audience",
+      "menuTitle": "Audience",
+      "blocks": [
+        {
+          "type": "text",
+          "html": "<p>This document is for any financial institution or software provider who has chosen to integrate with Revenue\u2019s Investment Account REST web services.</p>"
+        }
+      ]
+    },
+    {
+      "id": "document-context",
+      "title": "Document context",
+      "menuTitle": "Document context",
+      "blocks": [
+        {
+          "type": "text",
+          "html": "<p>This document provides a technical overview of how to integrate with Revenue\u2019s REST web services including how to sign requests validly. This document is designed to be read in conjunction with Investment Account technical documentation and examples that will be made available as services become available.</p>"
+        }
+      ]
+    },
+    {
+      "id": "version-history",
+      "title": "Version History",
+      "menuTitle": "Version History",
+      "blocks": [
+        {
+          "type": "text",
+          "html": "<p>The following table lists the changes made to this guide across versions.</p>"
+        },
+        {
+          "type": "table",
+          "columns": [
+            { "key": "version", "label": "Version Number" },
+            { "key": "changeDate", "label": "Change Date" },
+            { "key": "section", "label": "Section" },
+            { "key": "description", "label": "Change Description" }
+          ],
+          "rows": [
+            {
+              "version": "1.0",
+              "changeDate": "15/01/2026",
+              "section": "All",
+              "description": "Initial publication of the REST Connectivity Handshake Guide."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "introduction",
+      "title": "Introduction",
+      "menuTitle": "Introduction",
+      "blocks": [
+        {
+          "type": "text",
+          "html": "<p>This document details the Investment Account REST web services specification for the REST Connectivity Handshake.</p><p>The Documents Homepage specified in <a href=\"/\">Document References</a> is the home to all technical documentation, specification, and examples for the above web services which has been made available to enable software developers to build or update their software packages to be compatible with Revenue Investment Account services from July 2027. Path locations specified in this document are relative to this Homepage.</p><p>The OpenAPI Specification, originally known as the Swagger Specification, is a specification for machine-readable interface files for describing, producing, consuming, and visualizing RESTful Web services. The specification can be described using the YAML or JSON format. When available, Revenue will provide the specification in JSON format or, alternatively, it can be viewed using the ReDoc UI framework. Links will be provided for both the JSON format file and the ReDoc UI framework under \u2018Investment Account Web Service Specifications (REST/JSON)\u2019 on the Documents Homepage. The URL for each web service will use the HTTPS protocol to ensure the privacy of all communication between ROS and the web service client.</p>"
+        }
+      ]
+    },
+    {
+      "id": "calling-the-services",
+      "title": "Calling the Services",
+      "menuTitle": "Calling the Services",
+      "blocks": [
+        {
+          "type": "text",
+          "html": "<p>The web services for the Investment Account messages will be described in the REST OpenAPI Specification JSON file provided under \u2018Investment Account Web Service Specifications (REST/JSON)\u2019 on the Documents Homepage.</p><p>The OpenAPI, REST Security version specifications we are following include:</p><p>Open API Specification Version 3.0: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md</p><p>HTTP Signatures Version 08: https://tools.ietf.org/html/draft-cavage-http-signatures-08</p>"
+        }
+      ],
+      "subsections": [
+        {
+          "id": "rest-endpoints",
+          "title": "REST Endpoints",
+          "menuTitle": "REST Endpoints",
+          "blocks": [
+            {
+              "type": "text",
+              "html": "<p>The Investment Account web service endpoints are detailed below.</p>"
+            },
+            {
+              "type": "table",
+              "columns": [
+                { "key": "col1", "label": "Description" },
+                { "key": "col2", "label": "HTTP Method" },
+                { "key": "col3", "label": "Endpoint URL" },
+                { "key": "col4", "label": "Additional Information" }
+              ],
+              "rows": [
+                {
+                  "col1": "REST Connectivity Handshake",
+                  "col2": "GET",
+                  "col3": "https://www.ros.ie/individual-investment-account-web/ v1/rest/handshake? accountProviderRegistrationNumber={ accountProviderRegistrationNumber }&softwareUsed={softwareUsed}&softwareVersion={softwareVersion}&agentTain={agentTain}",
+                  "col4": "Query Parameters <ul><li>softwareUsed</li><li>softwareVersion</li><li>accountProviderRegistrationNumber (conditionally optional, required when using an Agent Cert)</li><li>agentTain (conditionally optional, required when using an Agent Cert)</li></ul>"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "digital-signatures-overview",
+          "title": "Digital Signatures",
+          "menuTitle": "Digital Signatures",
+          "blocks": [
+            {
+              "type": "text",
+              "html": "<p>The Investment Account web services will require a digital signature. This will be the digital signature of the declarant.</p>"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "interpreting-the-responses",
+      "title": "Interpreting the Responses",
+      "menuTitle": "Interpreting the Responses",
+      "blocks": [
+        {
+          "type": "text",
+          "html": "<p>Each web service will return a response message to the client as outlined below.</p>"
+        }
+      ],
+      "subsections": [
+        {
+          "id": "validation-errors",
+          "title": "Validation Errors",
+          "menuTitle": "Validation Errors",
+          "subsections": [
+            {
+              "id": "request-validation",
+              "title": "Request Validation",
+              "menuTitle": "Request Validation",
+              "blocks": [
+                {
+                  "type": "text",
+                  "html": "<p>When a request is made to a Investment Account web service three checks are carried out before any processing can occur. These include:</p><ul><li>Authentication</li><li>Authorisation</li><li>JSON API validation</li></ul><p>Step 1 of the validation process tries to verify the authenticity of the message by checking it has been signed with a valid digital signature. Step 2 focuses on authorising the credentials and finally, step 3 checks the message is valid using JSON API validation.</p><p>Please note that Step 2 will only be performed if an Account Provider\u2019s Investment Account tax registration number is provided as part of the request or if an Agent TAIN and Account Provider\u2019s Investment Account tax registration number is provided as part of the request.</p><p>If there are any errors encountered during the above processes, the response will include a HTTP status code of either 401 (Unauthorised) if authentication fails, 403 if authorisation fails and 400 (Bad Request) if JSON API validation fails. The message body will provide more information on the details of the problem. Where an error code is returned to the client, no processing will occur for that message.</p><p>If the message passes JSON API validation, authentication, and authorisation but the resource cannot be found the response will include a HTTP status code of 404. If the resources query parameters are not as required or are missing, the response will include a HTTP status code of 400.  Where an error code is returned to the client, no processing will occur for that message.</p>"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "successful-response",
+          "title": "Successful Response",
+          "menuTitle": "Successful Response",
+          "blocks": [
+            {
+              "type": "text",
+              "html": "<p>The \u201cConnectivity\u201d web service will return a HTTP 200 OK response if called with a validly signed request and neither the Account Provider\u2019s Investment Account tax registration number nor Agent TAIN have been included in the request.</p><p>If the request includes an Account Provider\u2019s Investment Account tax registration number, a HTTP 200 Ok response will be returned if the request is validly signed and the provided tax registration number is the owner of the certificate that signed the request.</p><p>If the request includes both an Account Provider\u2019s Investment Account tax registration number and Agent TAIN, a HTTP 200 Ok response will be returned if the request is validly signed, the provided Agent TAIN is the owner of the certificate and the provided tax registration number is linked to the Agent TAIN. Please note that if an Agent TAIN is provided a linked Account Provider\u2019s Investment Account tax registration number must also be provided.</p><p>A list of validation errors (if any) on the request is also included in the response. Please refer back to <a href=\"#validation-errors\">Section 3.1</a> for more information on Validation Errors.</p>"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "digital-signatures",
+      "title": "Digital Signatures",
+      "menuTitle": "Digital Signatures",
+      "blocks": [
+        {
+          "type": "text",
+          "html": "<p>Any ROS web service request that either returns confidential information or accepts submission of information must be digitally signed. This must be done using a digital certificate that has been previously retrieved from ROS.</p><p>The digital signature must be applied to the message in accordance with the HTTP Signatures specification as specified in <a href=\"#http-signatures\">Section 4.1.</a></p><p>The digital signature ensures the integrity of the document. By signing the document we can ensure that no malicious intruder has altered the document in any way. It can also be used for non-repudiation purposes.</p><p>If a valid digital signature is not attached, a HTTP status code of 401 (Unauthorised) will be returned. The message body will provide more information on the details of the problem.</p>"
+        }
+      ],
+      "subsections": [
+        {
+          "id": "http-signatures",
+          "title": "HTTP Signatures",
+          "menuTitle": "HTTP Signatures",
+          "blocks": [
+            {
+              "type": "text",
+              "html": "<p>The HTTP signatures protocol is intended to provide a simple and standard way for clients to sign HTTP requests. A summary of the structure of a HTTP Signature is outlined below. This is a simplified explanation of the HTTP Signatures specification. The full specification can be found at <a href=\"#\">Signing HTTP Messages</a> and should be read in full. The specification defines two approaches to building a HTTP signature, <a href=\"#\">\u201cThe 'Signature' HTTP Authentication Scheme\u201d</a> and <a href=\"#\">\u201cThe 'Signature' HTTP Header\u201d</a>, Revenue uses the latter.</p><p>At a high level, a HTTP Signature is a HTTP header that is added to a HTTP request. It is comprised of a set of components that were used to generate a digital signature and the digital signature itself.</p>"
+            }
+          ],
+          "subsections": [
+            {
+              "id": "http-signature-sample",
+              "title": "HTTP Signature Sample",
+              "menuTitle": "HTTP Signature Sample",
+              "blocks": [
+                {
+                  "type": "text",
+                  "html": "<p>Below is a sample HTTP Signature header.</p>"
+                },
+                {
+                  "type": "code",
+                  "html": "Signature: keyId=\"MIICfzCCAeigAwIBAgIJ... // truncated\",\nalgorithm=\"rsa-sha512\",\nheaders=\"(request-target) host date digest\",\nsignature=\"GdUqDgy94Z8mSYUjr/rL6qrLX/jmudS... // truncated\""
+                }
+              ]
+            },
+            {
+              "id": "http-signature-components",
+              "title": "HTTP Signature Components",
+              "menuTitle": "HTTP Signature Components",
+              "blocks": [
+                {
+                  "type": "text",
+                  "html": "<p>The Signature HTTP header contains four components, keyId, algorithm, headers and signature. Below is a description of each.</p><p><b>keyId:</b> The <code>keyId</code> field must contain a Base64 encoded version of the X509 certificate that accompanies the private key used to sign the message. This field is required.</p><p><b>algorithm:</b> The <code>algorithm</code> parameter is used to specify the digital signature algorithm to use when generating the signature. Revenue expects this to be <code>rsa-sha512</code>. This field is required.</p><p><b>headers:</b> The <code>headers</code> parameter specifies the list of headers used when generating the signature for the message. The parameter must be a lowercased, quoted list of HTTP header fields, separated by a single space character.  The list order is important, and MUST be specified in the order the HTTP header field-value pairs are concatenated together during signing. For POST requests, the digest field must be included.</p><p><b>signature:</b> The <code>signature</code> component is a base 64 encoded digital signature. The implementer uses the <code>algorithm</code> and <code>headers</code> field to form a canonicalized <code>signing string</code>.  This <code>signing string</code> is then signed with the private key that accompanies the X509 certificate associated with the <code>keyId</code> field and the algorithm corresponding to the <code>algorithm</code> field. The <code>signature</code> field is then base 64 encoded.</p>"
+                }
+              ]
+            },
+            {
+              "id": "signature-string-construction",
+              "title": "Signature String Construction",
+              "menuTitle": "Signature String Construction",
+              "blocks": [
+                {
+                  "type": "text",
+                  "html": "<p>In order to generate the string to be signed, the implementer MUST use the values of each HTTP header defined in the <code>headers</code> signature field, to build the signature string. Values must be in the order they appear in the <code>headers</code> signature field. If the associated HTTP header does not exist, it should be added to the HTTP request BEFORE attempting to construct this string.</p><p><b>Date:</b> The GMT time zone is enforced. Requests expire after 90 minutes has elapsed based on the timestamp received on the date/x-date header. Requests made up to 90 minutes before the revenue server time are also accepted to counteract the potential for server time discrepancies and daylight savings. For example:</p><p>A message with the timestamp in ISO_8601 (<code>\"yyyy-MM-dd'T'HH:mm:ss.SSSX\"</code>) format is received as follows:</p><p><code>2027-01-01T12:00:00.000Z</code></p><p>This message is valid for 90 minutes either side of it. i.e. from <code>2027-01-01T10:30:00.000Z</code> to <code>2027-01-01T13:30:00.000Z</code></p><p>Values for days and months should be two digits. As such, in the case where either the day or the month is a single digit, such as 2027-1-1, the single digit value should be prepended with a zero to make it 2027-01-01.</p><ul><li>ISO 8601</li><li>RFC 822, updated by RFC 1123</li><li>RFC 850, obsoleted by RFC 1036</li><li>ANSI C's time format</li></ul><p>Allowable values in the headers field are outlined in the table below.</p>"
+                },
+                {
+                  "type": "table",
+                  "columns": [
+                    { "key": "col1", "label": "Value" },
+                    { "key": "col2", "label": "Mandatory" }
+                  ],
+                  "rows": [
+                    { "col1": "<span class=\"marker-asterisk\">*</span> (request-target)", "col2": "Yes" },
+                    { "col1": "host", "col2": "Yes" },
+                    { "col1": "date", "col2": "Yes" },
+                    { "col1": "<span class=\"marker-asterisk\">**</span> x-date", "col2": "Yes, if date header cannot be added." },
+                    { "col1": "<span class=\"marker-asterisk\">***</span> digest", "col2": "Yes, if HTTP method is of type POST" },
+                    { "col1": "<span class=\"marker-asterisk\">****</span> content-type", "col2": "No" },
+                    { "col1": "content-length", "col2": "No" },
+                    { "col1": "x-http-method-override", "col2": "If HTTP method is of type POST, HTTP header \u2018X-HTTP-Method-Override\u2019 exists and \u2018Content-Type=application/x-www-form-urlencoded\u2019. See <a href=\"#\">Section 2.1.1</a> for more detail." }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "html": "<p><span class=\"marker-asterisk\">*</span> The <code>(request-target)</code> header field is a special header field in that its value is comprised of 2 HTTP headers. It is generated by concatenating the lowercase  HTTP method, an  ASCII space, and the request path headers. See below for sample (URI and parameters to be confirmed):</p><p>(request-target): get individual-investment-account-web/v1/rest/handshake? accountProviderRegistrationNumber=1234567FA&softwareUsed=ACME&softwareVersion=1.0</p><p><span class=\"marker-asterisk\">**</span> The \u2018x-date\u2019 headers field value should ONLY be used in conjunction with the X-Date HTTP header if a Date HTTP header cannot be added to the HTTP request programmatically. The Date header has a limitation when using JavaScript in a browser to build and send a HTTP signature. The limitation is that you cannot add a \u2018Date\u2019 HTTP header when executing JavaScript in a browser. The native xmlhttprequest object prohibits addition of a \u2018Date\u2019 HTTP header. Building the signature string that will be signed with an \u2018x-date\u2019 header instead of a \u2018date\u2019 header removes this restriction.</p><p><span class=\"marker-asterisk\">***</span> The \u2018Digest\u2019 HTTP header is created using the POST body/payload. The payload should be converted to a byte array, hashed using the SHA-512 algorithm and finally base64 encoded before adding it as a HTTP header.</p><p><span class=\"marker-asterisk\">****</span> Although Content-Type does not have to be part of the Signature string, it is required as a HTTP Header if HTTP Method Type is POST. If the request is a standard POST (i.e. not a header \u2018X-HTTP-Method-Override\u2019POST, then the Content-Type should be set to \u2018application/json\u2019 or \u2018application/json;charset=UTF-8\u2019</p><p>All other header field values are created by concatenating the lowercase header field name followed by an ASCII colon `:`, an ASCII space ` `, and the header field value.  Leading and trailing whitespace in the header field value MUST be omitted. If the header field is not the last value defined in the `headers` signature field, then append an ASCII newline `\\n`</p>"
+                }
+              ]
+            },
+            {
+              "id": "signature-creation",
+              "title": "Signature Creation",
+              "menuTitle": "Signature Creation",
+              "blocks": [
+                {
+                  "type": "text",
+                  "html": "<p>The signature component is a base 64 encoded digital signature. The implementer uses the <code>algorithm</code> and constructed Signature String.  The Signature String is signed with the private key that accompanies the X509 certificate associated with the <code>keyId</code> field and the algorithm corresponding to the <code>algorithm</code> field. The <code>signature</code> field is then base 64 encoded.</p>"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "example-messages",
+      "title": "Example Messages",
+      "menuTitle": "Example Messages",
+      "blocks": [
+        {
+          "type": "text",
+          "html": "<p>Message:</p>"
+        },
+        {
+          "type": "code",
+          "html": "https://www.ros.ie individual-investment-account-web/v1/rest/handshake? softwareUsed=ACME&softwareVersion=1.0"
+        },
+        {
+          "type": "text",
+          "html": "<p>Expected Response:</p>"
+        },
+        {
+          "type": "code",
+          "html": "HTTP 200 OK"
+        },
+        {
+          "type": "text",
+          "html": "<p>Message:</p>"
+        },
+        {
+          "type": "code",
+          "html": "https://www.ros.ie individual-investment-account-web/v1/rest/handshake?accountProviderRegistrationNumber=1234567FA&softwareUsed=ACME&softwareVersion=1.0"
+        },
+        {
+          "type": "text",
+          "html": "<p>Expected Response:</p>"
+        },
+        {
+          "type": "code",
+          "html": "HTTP 200 OK"
+        },
+        {
+          "type": "text",
+          "html": "<p>Message:</p>"
+        },
+        {
+          "type": "code",
+          "html": "https://www.ros.ie individual-investment-account-web/v1/rest/handshake?accountProviderRegistrationNumber=1234567FA&softwareUsed=Acme&softwareVersion=1.0&agentTain=123456J"
+        },
+        {
+          "type": "text",
+          "html": "<p>Expected Response:</p>"
+        },
+        {
+          "type": "code",
+          "html": "HTTP 200 OK"
+        }
+      ]
+    }
+  ]
+}
